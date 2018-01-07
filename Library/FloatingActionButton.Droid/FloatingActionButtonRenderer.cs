@@ -162,7 +162,7 @@ namespace FAB.Droid
             }
             else
             {
-                this.UpdateBackgroundColor();
+                SetBackgroundColors();
             }
         }
 
