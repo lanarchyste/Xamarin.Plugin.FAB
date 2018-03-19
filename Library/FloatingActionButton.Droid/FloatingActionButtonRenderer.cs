@@ -1,121 +1,103 @@
 ﻿using System;
-using Xamarin.Forms.Platform.Android;
-using Xamarin.Forms;
-using Android.Widget;
 using System.Threading.Tasks;
-using Android.Graphics;
 using Android.App;
-using FAB.Forms;
-using Android.Views;
-using Widget = Android.Support.Design.Widget;
+using Android.Content;
 using Android.Content.Res;
+using Android.Graphics;
 using Android.Support.V4.View;
+using Android.Views;
+using FAB.Droid;
+using FAB.Forms;
+using Xamarin.Forms;
+using Xamarin.Forms.Platform.Android;
+using AppCompat = Xamarin.Forms.Platform.Android.AppCompat;
+using Widget = Android.Support.Design.Widget;
 
-[assembly: ExportRenderer(typeof(FAB.Forms.FloatingActionButton), typeof(FAB.Droid.FloatingActionButtonRenderer))]
+[assembly: ExportRenderer(typeof(FloatingActionButton), typeof(FloatingActionButtonRenderer))]
 
 namespace FAB.Droid
 {
-    public partial class FloatingActionButtonRenderer : ViewRenderer<FloatingActionButton, Widget.FloatingActionButton>
+    public partial class FloatingActionButtonRenderer : AppCompat.ViewRenderer<FloatingActionButton, Widget.FloatingActionButton>
     {
+        public FloatingActionButtonRenderer(Context context) : base(context)
+        {
+        }
+
         protected override void OnElementChanged(ElementChangedEventArgs<FloatingActionButton> e)
         {
             base.OnElementChanged(e);
 
-            if (this.Control == null)
+            if (Control == null)
             {
-                this.ViewGroup.SetClipChildren(false);
-                this.ViewGroup.SetClipToPadding(false);
-                this.UpdateControlForSize();
-
-                this.UpdateStyle();
+                ViewGroup.SetClipChildren(false);
+                ViewGroup.SetClipToPadding(false);
+                UpdateControlForSize();
             }
 
             if (e.NewElement != null)
-            {
-                this.Control.Click += Fab_Click;
-            }
+                Control.Click += Fab_Click;
             else if (e.OldElement != null)
-            {
-                this.Control.Click -= Fab_Click;
-            }
+                Control.Click -= Fab_Click;
         }
 
         protected override void OnElementPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
+            base.OnElementPropertyChanged(sender, e);
+
             if (e.PropertyName == FloatingActionButton.SizeProperty.PropertyName)
-            {
-                this.UpdateControlForSize();
-            }
+                UpdateControlForSize();
             else if (e.PropertyName == FloatingActionButton.NormalColorProperty.PropertyName ||
                      e.PropertyName == FloatingActionButton.RippleColorProperty.PropertyName ||
                      e.PropertyName == FloatingActionButton.DisabledColorProperty.PropertyName)
-            {
-                this.SetBackgroundColors();
-            }
+                SetBackgroundColors();
             else if (e.PropertyName == FloatingActionButton.HasShadowProperty.PropertyName)
-            {
-                this.SetHasShadow();
-            }
+                SetHasShadow();
             else if (e.PropertyName == FloatingActionButton.SourceProperty.PropertyName)
-            {
-                this.SetImage();
-            }
-            else if (e.PropertyName == FloatingActionButton.IsEnabledProperty.PropertyName)
-            {
-                this.UpdateEnabled();
-            }
-            else
-            {
-                base.OnElementPropertyChanged(sender, e);
-            }
+                SetImage();
+            else if (e.PropertyName == VisualElement.IsEnabledProperty.PropertyName)
+                UpdateEnabled();
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
-                this.Control.Click -= this.Fab_Click;
-            }
+                Control.Click -= Fab_Click;
 
             base.Dispose(disposing);
         }
 
         private void UpdateControlForSize()
         {
-            LayoutInflater inflater = (LayoutInflater)this.Context.GetSystemService(Android.Content.Context.LayoutInflaterService);
+            var inflater = (LayoutInflater)Context.GetSystemService(Context.LayoutInflaterService);
 
             Widget.FloatingActionButton fab = null;
 
-            if (this.Element.Size == FabSize.Mini)
-            {
+            if (Element.Size == FabSize.Mini)
                 fab = (Widget.FloatingActionButton)inflater.Inflate(FAB.Droid.Resource.Layout.mini_fab, null);
-            }
             else // then normal
-            {
                 fab = (Widget.FloatingActionButton)inflater.Inflate(FAB.Droid.Resource.Layout.normal_fab, null);
-            }
 
-            this.SetNativeControl(fab);
-            this.UpdateStyle();
+            SetNativeControl(fab);
+            UpdateStyle();
         }
 
-        private void UpdateStyle()
+        void UpdateStyle()
         {
-            this.SetBackgroundColors();
-
-            this.SetHasShadow();
-
-            this.SetImage();
-
-            this.UpdateEnabled();
+            SetHasShadow();
+            SetImage();
+            UpdateEnabled();
         }
 
-        private void SetBackgroundColors()
+        void SetBackgroundColors()
         {
-            this.Control.BackgroundTintList = ColorStateList.ValueOf(this.Element.NormalColor.ToAndroid());
+            if (Control.Enabled == false)
+                ViewCompat.SetBackgroundTintList(Control, ColorStateList.ValueOf(Element.DisabledColor.ToAndroid()));
+            else
+                ViewCompat.SetBackgroundTintList(Control, ColorStateList.ValueOf(Element.NormalColor.ToAndroid()));
+
             try
             {
-                this.Control.RippleColor = this.Element.RippleColor.ToAndroid();
+                Control.RippleColor = Element.RippleColor.ToAndroid();
             }
             catch (MissingMethodException)
             {
@@ -123,50 +105,39 @@ namespace FAB.Droid
             }
         }
 
-        private void SetHasShadow()
+        void SetHasShadow()
         {
             try
             {
-                if (this.Element.HasShadow)
-                {
-                    ViewCompat.SetElevation(this.Control, 20);
-                }
+                if (Element.HasShadow && Element.IsEnabled)
+                    ViewCompat.SetElevation(Control, 20);
                 else
-                {
-                    ViewCompat.SetElevation(this.Control, 0);
-                }
+                    ViewCompat.SetElevation(Control, 0);
             }
             catch { }
         }
 
-        private void SetImage()
+        void SetImage()
         {
             Task.Run(async () =>
             {
-                var bitmap = await this.GetBitmapAsync(this.Element.Source);
+                var bitmap = await GetBitmapAsync(Element.Source);
 
-                (this.Context as Activity).RunOnUiThread(() =>
+                (Context as Activity).RunOnUiThread(() =>
                 {
-                    this.Control?.SetImageBitmap(bitmap);
+                    Control?.SetImageBitmap(bitmap);
                 });
             });
         }
 
-        private void UpdateEnabled()
+        void UpdateEnabled()
         {
-            this.Control.Enabled = this.Element.IsEnabled;
+            Control.Enabled = Element.IsEnabled;
 
-            if (this.Control.Enabled == false)
-            {
-                this.Control.BackgroundTintList = ColorStateList.ValueOf(this.Element.DisabledColor.ToAndroid());
-            }
-            else
-            {
-                SetBackgroundColors();
-            }
+            SetBackgroundColors();
         }
 
-        private async Task<Bitmap> GetBitmapAsync(ImageSource source)
+        async Task<Bitmap> GetBitmapAsync(ImageSource source)
         {
             var handler = GetHandler(source);
             var returnValue = (Bitmap)null;
@@ -176,9 +147,9 @@ namespace FAB.Droid
             return returnValue;
         }
 
-        private void Fab_Click(object sender, EventArgs e)
+        void Fab_Click(object sender, EventArgs e)
         {
-            this.Element.SendClicked();
+            Element.SendClicked();
         }
     }
 }

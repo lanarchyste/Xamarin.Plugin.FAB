@@ -1,152 +1,129 @@
 ﻿using System;
-using Xamarin.Forms.Platform.iOS;
-using System.Threading.Tasks;
-using Xamarin.Forms;
-using UIKit;
 using FAB.Forms;
+using FAB.iOS;
+using UIKit;
+using Xamarin.Forms;
+using Xamarin.Forms.Platform.iOS;
 
-[assembly: ExportRenderer(typeof(FAB.Forms.FloatingActionButton), typeof(FAB.iOS.FloatingActionButtonRenderer))]
+[assembly: ExportRenderer(typeof(FloatingActionButton), typeof(FloatingActionButtonRenderer))]
 
 namespace FAB.iOS
 {
-	public partial class FloatingActionButtonRenderer : ViewRenderer<FloatingActionButton, MNFloatingActionButton>
-	{
-		protected override void OnElementChanged(ElementChangedEventArgs<FloatingActionButton> e)
-		{
-			base.OnElementChanged(e);
+    public partial class FloatingActionButtonRenderer : ViewRenderer<FloatingActionButton, MNFloatingActionButton>
+    {
+        protected override void OnElementChanged(ElementChangedEventArgs<FloatingActionButton> e)
+        {
+            base.OnElementChanged(e);
 
-			if (this.Control == null)
-			{
+            if (this.Control == null)
+            {
                 var fab = new MNFloatingActionButton(this.Element.AnimateOnSelection);
-				fab.Frame = new CoreGraphics.CGRect(0, 0, 24, 24);
+                fab.Frame = new CoreGraphics.CGRect(0, 0, 24, 24);
 
-				this.SetNativeControl(fab);
+                SetNativeControl(fab);
 
-                this.UpdateStyles();
-			}
+                UpdateStyles();
+            }
 
-			if (e.NewElement != null)
-			{
-				this.Control.TouchUpInside += this.Fab_TouchUpInside;
-			}
+            if (e.NewElement != null)
+                Control.TouchUpInside += Fab_TouchUpInside;
 
-			if (e.OldElement != null)
-			{
-				this.Control.TouchUpInside -= this.Fab_TouchUpInside;
-			}
-		}
+            if (e.OldElement != null)
+                Control.TouchUpInside -= Fab_TouchUpInside;
+        }
 
         protected override void OnElementPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
+            base.OnElementPropertyChanged(sender, e);
+
             if (e.PropertyName == FloatingActionButton.SizeProperty.PropertyName)
-            {
-                this.SetSize();
-            }
+                SetSize();
             else if (e.PropertyName == FloatingActionButton.NormalColorProperty.PropertyName ||
                      e.PropertyName == FloatingActionButton.RippleColorProperty.PropertyName ||
                      e.PropertyName == FloatingActionButton.DisabledColorProperty.PropertyName)
-            {
-                this.SetBackgroundColors();
-            }
+                SetBackgroundColors();
             else if (e.PropertyName == FloatingActionButton.HasShadowProperty.PropertyName)
-            {
-                this.SetHasShadow();
-            }
+                SetHasShadow();
             else if (e.PropertyName == FloatingActionButton.SourceProperty.PropertyName ||
-                     e.PropertyName == FloatingActionButton.WidthProperty.PropertyName ||
-                     e.PropertyName == FloatingActionButton.HeightProperty.PropertyName)
-            {
-                this.SetImage();
-            }
-            else if (e.PropertyName == FloatingActionButton.IsEnabledProperty.PropertyName)
-            {
-                this.UpdateEnabled();
-            }
+                     e.PropertyName == VisualElement.WidthProperty.PropertyName ||
+                     e.PropertyName == VisualElement.HeightProperty.PropertyName)
+                SetImage();
+            else if (e.PropertyName == VisualElement.IsEnabledProperty.PropertyName)
+                UpdateEnabled();
             else if (e.PropertyName == FloatingActionButton.AnimateOnSelectionProperty.PropertyName)
+                UpdateAnimateOnSelection();
+        }
+
+        public override SizeRequest GetDesiredSize(double widthConstraint, double heightConstraint)
+        {
+            var viewSize = Element.Size == FabSize.Normal ? 56 : 40;
+
+            return new SizeRequest(new Size(viewSize, viewSize));
+        }
+
+        void UpdateStyles()
+        {
+            SetHasShadow();
+            SetImage();
+            SetSize();
+            UpdateEnabled();
+        }
+
+        void SetSize()
+        {
+            switch (Element.Size)
             {
-                this.UpdateAnimateOnSelection();
+                case FabSize.Mini:
+                    Control.Size = MNFloatingActionButton.FABSize.Mini;
+                    break;
+
+                case FabSize.Normal:
+                    Control.Size = MNFloatingActionButton.FABSize.Normal;
+                    break;
             }
+        }
+
+        void SetBackgroundColors()
+        {
+            if (Control.Enabled == false)
+                Control.BackgroundColor = Element.DisabledColor.ToUIColor();
             else
-            {
-                base.OnElementPropertyChanged(sender, e);
-            }
-        }
-
-		public override SizeRequest GetDesiredSize(double widthConstraint, double heightConstraint)
-		{
-			var viewSize = this.Element.Size == FAB.Forms.FabSize.Normal ? 56 : 40;
-
-			return new SizeRequest(new Size(viewSize, viewSize));
-		}
-
-		private void UpdateStyles()
-		{
-            this.SetSize();
-
-            this.SetBackgroundColors();
-
-            this.SetHasShadow();
-
-            this.SetImage();
-
-            this.UpdateEnabled();
-		}
-
-        private void SetSize()
-        {
-            switch (this.Element.Size)
-            {
-                case FAB.Forms.FabSize.Mini:
-                    this.Control.Size = MNFloatingActionButton.FABSize.Mini;
-                    break;
-                case FAB.Forms.FabSize.Normal:
-                    this.Control.Size = MNFloatingActionButton.FABSize.Normal;
-                    break;
-            }
-        }
-
-        private void SetBackgroundColors()
-        {
-            this.Control.BackgroundColor = this.Element.NormalColor.ToUIColor();
+                Control.BackgroundColor = Element.NormalColor.ToUIColor();
             //this.Control.PressedBackgroundColor = this.Element.Ripplecolor.ToUIColor();
         }
 
-        private void SetHasShadow()
+        void SetHasShadow()
         {
-            this.Control.HasShadow = this.Element.HasShadow;
-        }
-
-        private void SetImage()
-        {
-            SetImageAsync(this.Element.Source, this.Control);
-        }
-
-        private void UpdateEnabled()
-        {
-            this.Control.Enabled = this.Element.IsEnabled;
-
-            if (this.Control.Enabled == false)
-            {
-                this.Control.BackgroundColor = this.Element.DisabledColor.ToUIColor();
-            }
+            if (Element.HasShadow && Element.IsEnabled)
+                Control.HasShadow = true;
             else
-            {
-                this.SetBackgroundColors();
-            }
+                Control.HasShadow = false;
         }
 
-        private void UpdateAnimateOnSelection()
+        void SetImage()
         {
-            this.Control.AnimateOnSelection = this.Element.AnimateOnSelection;
+            SetImageAsync(Element.Source, Control);
         }
 
-        private void Fab_TouchUpInside(object sender, EventArgs e)
+        void UpdateEnabled()
         {
-            this.Element.SendClicked();
+            Control.Enabled = Element.IsEnabled;
+
+            SetBackgroundColors();
         }
 
-		private async static void SetImageAsync(ImageSource source, MNFloatingActionButton targetButton)
-		{
+        void UpdateAnimateOnSelection()
+        {
+            Control.AnimateOnSelection = Element.AnimateOnSelection;
+        }
+
+        void Fab_TouchUpInside(object sender, EventArgs e)
+        {
+            Element.SendClicked();
+        }
+
+        async static void SetImageAsync(ImageSource source, MNFloatingActionButton targetButton)
+        {
             if (source != null)
             {
                 var widthRequest = targetButton.Frame.Width;
@@ -155,7 +132,7 @@ namespace FAB.iOS
                 var handler = GetHandler(source);
                 using (UIImage image = await handler.LoadImageAsync(source))
                 {
-                    if(image != null)
+                    if (image != null)
                     {
                         UIGraphics.BeginImageContextWithOptions(new CoreGraphics.CGSize(widthRequest, heightRequest), false, UIScreen.MainScreen.Scale);
                         image.Draw(new CoreGraphics.CGRect(0, 0, widthRequest, heightRequest));
@@ -171,16 +148,12 @@ namespace FAB.iOS
                             }
                         }
                     }
-                    else 
-                    {
+                    else
                         targetButton.CenterImageView.Image = null;
-                    }
                 }
             }
             else
-            {
                 targetButton.CenterImageView.Image = null;
-            }
-		}
-	}
+        }
+    }
 }
