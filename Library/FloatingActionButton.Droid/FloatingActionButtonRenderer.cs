@@ -34,6 +34,8 @@ namespace FAB.Droid
                 UpdateControlForSize();
             }
 
+            Control.StateListAnimator = null;
+
             if (e.NewElement != null)
                 Control.Click += Fab_Click;
             else if (e.OldElement != null)
@@ -109,10 +111,10 @@ namespace FAB.Droid
         {
             try
             {
-                if (Element.HasShadow && Element.IsEnabled)
-                    ViewCompat.SetElevation(Control, 20);
+                if (Element.HasShadow && Element.IsEnabled && Convert.ToInt32(Element.NormalColor.ToAndroid().A) == 255)
+                    Control.Elevation = 20f;
                 else
-                    ViewCompat.SetElevation(Control, 0);
+                    Control.Elevation = 0f;
             }
             catch { }
         }

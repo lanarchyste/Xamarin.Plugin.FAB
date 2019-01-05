@@ -94,10 +94,16 @@ namespace FAB.iOS
 
         void SetHasShadow()
         {
-            if (Element.HasShadow && Element.IsEnabled)
+            if (Element.HasShadow && Element.IsEnabled && Element.NormalColor.ToCGColor().Alpha == 1)
+            {
                 Control.HasShadow = true;
+                Control.ShadowColor = null;
+            }
             else
+            {
                 Control.HasShadow = false;
+                Control.ShadowColor = UIColor.Clear;
+            }
         }
 
         void SetImage()
