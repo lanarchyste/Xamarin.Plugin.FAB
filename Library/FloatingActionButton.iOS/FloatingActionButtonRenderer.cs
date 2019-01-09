@@ -94,16 +94,10 @@ namespace FAB.iOS
 
         void SetHasShadow()
         {
-            if (Element.HasShadow && Element.IsEnabled && Element.NormalColor.ToCGColor().Alpha == 1)
-            {
+            if (Element.HasShadow && Element.IsEnabled)
                 Control.HasShadow = true;
-                Control.ShadowColor = null;
-            }
             else
-            {
                 Control.HasShadow = false;
-                Control.ShadowColor = UIColor.Clear;
-            }
         }
 
         void SetImage()
@@ -115,6 +109,7 @@ namespace FAB.iOS
         {
             Control.Enabled = Element.IsEnabled;
 
+            SetHasShadow();
             SetBackgroundColors();
         }
 

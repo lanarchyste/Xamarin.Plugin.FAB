@@ -34,8 +34,6 @@ namespace FAB.Droid
                 UpdateControlForSize();
             }
 
-            Control.StateListAnimator = null;
-
             if (e.NewElement != null)
                 Control.Click += Fab_Click;
             else if (e.OldElement != null)
@@ -111,7 +109,7 @@ namespace FAB.Droid
         {
             try
             {
-                if (Element.HasShadow && Element.IsEnabled && Convert.ToInt32(Element.NormalColor.ToAndroid().A) == 255)
+                if (Element.HasShadow && Element.IsEnabled)
                     Control.Elevation = 20f;
                 else
                     Control.Elevation = 0f;
@@ -136,6 +134,7 @@ namespace FAB.Droid
         {
             Control.Enabled = Element.IsEnabled;
 
+            SetHasShadow();
             SetBackgroundColors();
         }
 
