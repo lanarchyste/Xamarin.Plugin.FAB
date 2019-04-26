@@ -1,7 +1,10 @@
 ﻿using System;
 using Xamarin.Forms;
 using System.Windows.Input;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("FAB.Droid")]
+[assembly: InternalsVisibleTo("FAB.iOS")]
 namespace FAB.Forms
 {
     public class FloatingActionButton : View

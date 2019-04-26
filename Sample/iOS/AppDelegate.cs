@@ -1,24 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Foundation;
+﻿using Foundation;
 using UIKit;
 
 namespace FABSample.iOS
 {
-    [Register ("AppDelegate")]
+    [Register("AppDelegate")]
     public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
     {
-        public override bool FinishedLaunching (UIApplication app, NSDictionary options)
+        public override bool FinishedLaunching(UIApplication uiApplication, NSDictionary launchOptions)
         {
-            global::Xamarin.Forms.Forms.Init ();
+            global::Xamarin.Forms.Forms.Init();
 
-            FAB.iOS.FloatingActionButtonRenderer.InitControl ();
+            FAB.iOS.FloatingActionButtonRenderer.InitControl();
 
-            LoadApplication (new App ());
+            LoadApplication(new App());
 
-            return base.FinishedLaunching (app, options);
+            return base.FinishedLaunching(uiApplication, launchOptions);
         }
     }
 }

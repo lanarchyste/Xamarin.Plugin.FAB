@@ -1,6 +1,4 @@
-﻿using System;
-using Xamarin.Forms;
-using System.Windows.Input;
+﻿using Xamarin.Forms;
 
 namespace FAB.Forms
 {

@@ -57,13 +57,13 @@
     <Compile Include="LinkerPleaseInclude.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FloatingActionButton.Forms\Profile78\FAB.Forms.Profile78.csproj">
-      <Project>{78B00F76-5FB4-4429-ABF6-42A80A6E967E}</Project>
-      <Name>FAB.Forms.Profile78</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\FloatingActionButton.Forms\FAB.Forms.csproj">
+      <Project>{1DF89441-FDD9-45E0-A673-7314C3C557DA}</Project>
+      <Name>FAB.Forms</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\FloatingActionButton.Shared\FloatingActionButton.Shared.projitems" Label="Shared" Condition="Exists('..\FloatingActionButton.Shared\FloatingActionButton.Shared.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

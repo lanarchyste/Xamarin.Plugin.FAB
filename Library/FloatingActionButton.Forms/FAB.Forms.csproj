@@ -7,7 +7,4 @@
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="3.6.0.344457" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Library\FloatingActionButton.Forms\FAB.Forms.csproj" />
-  </ItemGroup>
 </Project>

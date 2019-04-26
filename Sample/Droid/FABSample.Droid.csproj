@@ -208,17 +208,17 @@
     <AndroidResource Include="Resources\drawable\list.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FABSample\FABSample.csproj">
-      <Project>{8A6D05F8-9D1F-4327-B7A5-4DD290270327}</Project>
-      <Name>FABSample</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Library\FloatingActionButton.Droid\FAB.Droid.csproj">
       <Project>{49CE4944-F3EC-4241-9AC2-617F42624CFE}</Project>
       <Name>FAB.Droid</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Library\FloatingActionButton.Forms\Profile78\FAB.Forms.Profile78.csproj">
-      <Project>{78B00F76-5FB4-4429-ABF6-42A80A6E967E}</Project>
-      <Name>FAB.Forms.Profile78</Name>
+    <ProjectReference Include="..\..\Library\FAB.Forms\FAB.Forms.csproj">
+      <Project>{1DF89441-FDD9-45E0-A673-7314C3C557DA}</Project>
+      <Name>FAB.Forms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FABSample\FABSample.csproj">
+      <Project>{CA9B87D4-0AF4-4253-B080-17F4B9CD5068}</Project>
+      <Name>FABSample</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

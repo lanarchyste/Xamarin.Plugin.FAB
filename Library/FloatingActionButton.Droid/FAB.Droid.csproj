@@ -215,9 +215,9 @@
     <AndroidResource Include="Resources\layout\normal_fab.axml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FloatingActionButton.Forms\Profile78\FAB.Forms.Profile78.csproj">
-      <Project>{78B00F76-5FB4-4429-ABF6-42A80A6E967E}</Project>
-      <Name>FAB.Forms.Profile78</Name>
+    <ProjectReference Include="..\FloatingActionButton.Forms\FAB.Forms.csproj">
+      <Project>{1DF89441-FDD9-45E0-A673-7314C3C557DA}</Project>
+      <Name>FAB.Forms</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\..\packages\Xamarin.Build.Download.0.4.11\build\Xamarin.Build.Download.targets" Condition="Exists('..\..\packages\Xamarin.Build.Download.0.4.11\build\Xamarin.Build.Download.targets')" />

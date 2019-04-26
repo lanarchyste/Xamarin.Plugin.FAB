@@ -6,7 +6,6 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
 [assembly: ExportRenderer(typeof(FloatingActionButton), typeof(FloatingActionButtonRenderer))]
-
 namespace FAB.iOS
 {
     public partial class FloatingActionButtonRenderer : ViewRenderer<FloatingActionButton, MNFloatingActionButton>

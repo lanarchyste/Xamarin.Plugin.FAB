@@ -1,5 +1,4 @@
-﻿using System;
-using FAB.Forms;
+﻿using FAB.Forms;
 using Xamarin.Forms;
 
 namespace FABSample
