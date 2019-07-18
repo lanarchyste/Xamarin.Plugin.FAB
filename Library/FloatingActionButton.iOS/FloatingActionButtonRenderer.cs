@@ -14,6 +14,9 @@ namespace FAB.iOS
         {
             base.OnElementChanged(e);
 
+            if (this.Element == null)
+                return;
+
             if (this.Control == null)
             {
                 var fab = new MNFloatingActionButton(this.Element.AnimateOnSelection);
